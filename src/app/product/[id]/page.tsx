@@ -2,9 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { categories, products } from "@/data/catalog";
+import { ProductCard } from "@/components/ProductCard";
 
 
 const WHATSAPP_NUMBER = "447845068117"; // replace with your client number (no +)
+
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -12,6 +14,8 @@ function formatGBP(value: number) {
     currency: "GBP",
   }).format(value);
 }
+
+
 
 export default async function ProductDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -99,52 +103,45 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
             </p>
           </div>
 
-          {<div className="rounded-2xl border p-5">
-  <p className="font-medium">Product information</p>
-
-  {product.description ? (
-    <p className="mt-2 text-sm text-gray-700">{product.description}</p>
-  ) : (
-    <p className="mt-2 text-sm text-gray-600">No description available yet.</p>
-  )}
-
-  <div className="mt-4">
-    <p className="text-sm font-medium">Ingredients</p>
-    {product.ingredients && product.ingredients.length > 0 ? (
-      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-700">
-        {product.ingredients.map((ing) => (
-          <li key={ing}>{ing}</li>
-        ))}
-      </ul>
-    ) : (
-      <p className="mt-2 text-sm text-gray-600">Ingredients not listed.</p>
-    )}
-  </div>
-
-  <div className="mt-4">
-    <p className="text-sm font-medium">Allergens</p>
-    {product.allergens && product.allergens.length > 0 ? (
-      <div className="mt-2 flex flex-wrap gap-2">
-        {product.allergens.map((a) => (
-          <span key={a} className="rounded-full bg-yellow-100 px-3 py-1 text-xs">
-            {a}
-          </span>
-        ))}
-      </div>
-    ) : (
-      <p className="mt-2 text-sm text-gray-600">No known allergens listed.</p>
-    )}
-  </div>
-
-  <p className="mt-4 text-xs text-gray-500">
-    Please contact us on WhatsApp if you have allergy concerns. Product details may vary by supplier.
-  </p>
-</div>
-}
           <div className="rounded-2xl border p-5">
             <p className="font-medium">Product information</p>
-            <p className="mt-2 text-sm text-gray-600">
-              This section can later include description, ingredients, allergens, and delivery notes.
+
+            {product.description ? (
+              <p className="mt-2 text-sm text-gray-700">{product.description}</p>
+            ) : (
+              <p className="mt-2 text-sm text-gray-600">No description available yet.</p>
+            )}
+
+            <div className="mt-4">
+              <p className="text-sm font-medium">Ingredients</p>
+              {product.ingredients && product.ingredients.length > 0 ? (
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-700">
+                  {product.ingredients.map((ing) => (
+                    <li key={ing}>{ing}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-sm text-gray-600">Ingredients not listed.</p>
+              )}
+            </div>
+
+            <div className="mt-4">
+              <p className="text-sm font-medium">Allergens</p>
+              {product.allergens && product.allergens.length > 0 ? (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {product.allergens.map((a) => (
+                    <span key={a} className="rounded-full bg-yellow-100 px-3 py-1 text-xs">
+                      {a}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-2 text-sm text-gray-600">No known allergens listed.</p>
+              )}
+            </div>
+
+            <p className="mt-4 text-xs text-gray-500">
+              Please contact us on WhatsApp if you have allergy concerns. Product details may vary by supplier.
             </p>
           </div>
         </div>

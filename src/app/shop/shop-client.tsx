@@ -18,7 +18,7 @@ type BasketItem = {
 
 function buildWhatsAppBasketMessage(items: BasketItem[]) {
   const lines: string[] = [];
-  lines.push("Hi, I’d like to place an order from ToksMimi Foods:");
+  lines.push("Hi, I will like to place an order from ToksMimi Foods:");
   lines.push("");
 
   items.forEach((it, idx) => {
@@ -201,6 +201,30 @@ useEffect(() => {
   }
 }, [basket]);
 
+useEffect(() => {
+  // If user lands on /shop#basket, scroll once the page is ready
+  if (typeof window === "undefined") return;
+
+  const scrollToBasket = () => {
+    if (window.location.hash === "#basket") {
+      const el = document.getElementById("basket");
+      if (el) {
+        // slight delay helps ensure layout is painted before scrolling
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 50);
+      }
+    }
+  };
+
+  // Check immediately in case already #basket
+  scrollToBasket();
+
+  // Listen for hash changes (e.g., when clicking the header link)
+  window.addEventListener("hashchange", scrollToBasket);
+
+  return () => window.removeEventListener("hashchange", scrollToBasket);
+}, []);
 
   return (
     <section className="space-y-4">
@@ -279,38 +303,79 @@ useEffect(() => {
           Showing <span className="font-medium">{filtered.length}</span> item(s)
         </p>
 
-        <div className="mt-4 rounded-2xl border p-4">
-  <div className="flex items-center justify-between">
-    <p className="font-medium">Basket ({basketCount})</p>
+        <div id="basket" className="mt-4 rounded-2xl border p-4">
+  <div className="flex items-start justify-between gap-4">
+    <div>
+      <p className="font-medium">Basket</p>
+      <p className="text-sm text-gray-600">
+        Items selected: <span className="font-medium">{basketCount}</span>
+      </p>
+    </div>
 
-    <a
-      href={whatsappHref}
-      target="_blank"
-      rel="noreferrer"
-      className={`rounded-lg px-4 py-2 text-sm text-white ${
-        basketItems.length ? "bg-black" : "bg-gray-400 pointer-events-none"
-      }`}
-    >
-      Send order on WhatsApp
-    </a>
+    <div className="flex gap-2">
+      <button
+        onClick={clearBasket}
+        type="button"
+        className="rounded-lg border px-3 py-2 text-sm"
+        disabled={basketItems.length === 0}
+      >
+        Clear
+      </button>
+
+      <a
+        href={whatsappHref}
+        target="_blank"
+        rel="noreferrer"
+        className={`rounded-lg px-4 py-2 text-sm text-white ${
+          basketItems.length > 0 ? "bg-black" : "bg-gray-400 pointer-events-none"
+        }`}
+      >
+        Order on WhatsApp
+      </a>
+    </div>
   </div>
 
   {basketItems.length === 0 ? (
-    <p className="mt-2 text-sm text-gray-600">Add items below to build your order.</p>
+    <p className="mt-3 text-sm text-gray-600">
+      Your basket is empty. Add items below, then send one WhatsApp message.
+    </p>
   ) : (
-    <ul className="mt-3 space-y-2 text-sm">
+    <div className="mt-4 space-y-3">
       {basketItems.map(({ product, qty }) => (
-        <li key={product.id} className="flex justify-between">
-          <span>{product.name} x{qty}</span>
-          <button
-            className="text-xs underline"
-            onClick={() => removeFromBasket(product)}
-          >
-            remove
-          </button>
-        </li>
+        <div key={product.id} className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="truncate font-medium">{product.name}</p>
+            <p className="text-sm text-gray-600">
+              {product.unit ?? ""}{" "}
+              {typeof product.priceGBP === "number" ? `• £${product.priceGBP.toFixed(2)}` : ""}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="rounded-lg border px-3 py-1"
+              onClick={() => removeFromBasket(product)}
+            >
+              -
+            </button>
+
+            <div className="w-14 rounded-lg border py-1 text-center text-sm">
+              {qty}
+            </div>
+
+            <button
+              type="button"
+              className="rounded-lg border px-3 py-1"
+              onClick={() => addToBasket(product)}
+              disabled={!product.inStock}
+            >
+              +
+            </button>
+          </div>
+        </div>
       ))}
-    </ul>
+    </div>
   )}
 </div>
 
