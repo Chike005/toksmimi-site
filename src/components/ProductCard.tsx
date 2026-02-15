@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/data/catalog";
 
-const WHATSAPP_NUMBER = "+447845068117"; // replace (no +)
+const WHATSAPP_NUMBER = "447845068117"; // replace (no +)
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(value);
@@ -31,7 +31,7 @@ export function ProductCard({
     typeof product.priceGBP === "number" ? formatGBP(product.priceGBP) : "Message for price";
 
   const waText = `Hi, I will like to order: ${product.name}${product.unit ? ` (${product.unit})` : ""}`;
-
+ 
   const detailsHref = `/product/${product.id}`;
 
   const basketEnabled = typeof onAdd === "function" || typeof onRemove === "function";

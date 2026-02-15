@@ -13,7 +13,7 @@ function getBasketCountFromStorage(): number {
     const parsed = JSON.parse(raw) as Record<string, unknown>;
     if (!parsed || typeof parsed !== "object") return 0;
 
-    return Object.values(parsed).reduce((sum, v) => {
+    return Object.values(parsed).reduce((sum: number, v: unknown) => {
       const n = typeof v === "number" ? v : Number(v);
       return Number.isFinite(n) && n > 0 ? sum + Math.floor(n) : sum;
     }, 0);
@@ -21,7 +21,6 @@ function getBasketCountFromStorage(): number {
     return 0;
   }
 }
-
 
 export function Header() {
   console.log('Header rendering');
@@ -83,8 +82,9 @@ export function Header() {
     router.push(`/shop?q=${encodeURIComponent(query)}`);
   }
 
+  
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between md:gap-4">
         <div className="flex items-center justify-between gap-4">
           <Link href="/" className="text-lg font-semibold">
@@ -108,7 +108,9 @@ export function Header() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search products… (e.g., garri, rice, oil)"
-            className="w-full rounded-lg border px-3 py-2 text-sm md:w-[360px]"
+            className={`w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm
+               text-slate-900 placeholder:text-slate-400
+               dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-400 md:w-[360px]`}
           />
           <button
             type="submit"
