@@ -62,13 +62,20 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="rounded-2xl border p-4 text-sm text-gray-600">
-          <p className="font-medium text-gray-900">Delivery / Pickup</p>
-          <p className="mt-1">
-            Add a short line here about delivery areas, pickup times, and how
-            orders are confirmed on WhatsApp.
-          </p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+          <p className="font-medium text-slate-900 dark:text-slate-50">Delivery & Pickup</p>
+
+          <div className="mt-2 space-y-2">
+            <p>
+              We deliver across Manchester and surrounding areas 🚚 Orders are usually processed same-day
+              or next-day depending on availability.
+            </p>
+            <p>
+              Prefer pickup? You can collect at a convenient time — we will confirm everything via WhatsApp.
+            </p>
+          </div>
         </div>
+
       </header>
 
       {/* Category grid */}

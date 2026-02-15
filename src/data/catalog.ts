@@ -29,13 +29,18 @@ export type Product = {
 };
 
 export const categories: { id: CategoryId; name: string }[] = [
-  { id: "rice", name: "Rice & Grains" },
-  { id: "spices", name: "Spices" },
+  { id: "rice", name: "Rice" },
+  { id: "grains", name: "Grains & Flour" },
+  { id: "tubers", name: "Tubers" },
+  { id: "spices", name: "Spices & Seasoning" },
   { id: "oils", name: "Oils" },
-  { id: "tin", name: "Tin & Cans" },
   { id: "snacks", name: "Snacks" },
+  { id: "fish", name: "Fish & Seafoods" },
+  { id: "dairy", name: "Dairy" },
   { id: "drinks", name: "Drinks" },
+  { id: "tin", name: "Tin & Cans" },
 ];
+
 
 import Papa from 'papaparse';
 import fs from 'fs';

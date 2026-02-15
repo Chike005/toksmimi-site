@@ -8,6 +8,7 @@ type SearchParams = {
   sort?: string;
 };
 
+
 export default async function ShopPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const sp = await searchParams;
   const category = (sp.category ?? "").trim();
