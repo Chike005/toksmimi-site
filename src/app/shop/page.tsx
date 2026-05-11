@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { categories, products } from "@/data/catalog";
+import { categories} from "@/data/catalog";
 import { ShopClient } from "./shop-client";
+import { loadProductsFromCsv } from "@/data/products.server";
 
 type SearchParams = {
   category?: string;
@@ -17,6 +18,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
 
   // Validate category against known categories (prevents invalid URL values breaking UI)
   const validCategory = categories.some((c) => c.id === category) ? category : "";
+  const products = await loadProductsFromCsv();
 
   return (
     <main className="mx-auto max-w-6xl p-6">

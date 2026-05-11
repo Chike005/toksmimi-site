@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "../components/Header";
+import Link from "next/link";
+
+
+
+<Link href="/basket">Basket</Link>
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
