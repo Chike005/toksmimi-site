@@ -6,7 +6,7 @@ import { loadProductsFromCsv } from "@/data/products.server";
 import { BackButton } from "@/components/BackButton";
 import { AddToBasketButton } from "@/components/AddToBasketButton";
 
-const WHATSAPP_NUMBER = "074402277896";
+const WHATSAPP_NUMBER = "4474402277896";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
