@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { categories, products } from "@/data/catalog";
+import { categories } from "@/data/catalog";
 import { ProductCard } from "@/components/ProductCard";
+import { loadProductsFromCsv } from "@/data/products.server";
 
 
-const WHATSAPP_NUMBER = "447845068117"; // replace with your client number (no +)
+const WHATSAPP_NUMBER = "4474402277896"; // replace with your client number (no +)
 
 
 function formatGBP(value: number) {
@@ -32,7 +33,9 @@ const FEATURED: FeaturedCategory[] = [
   { id: "snacks", title: "Snacks", maxItems: 4 },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const products = await loadProductsFromCsv();
+
   // Simple "popular" selection: in-stock first, then cheapest first (you can change logic later)
   const popular = products
     .filter((p) => p.inStock)

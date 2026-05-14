@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/data/catalog";
 
-const WHATSAPP_NUMBER = "447845068117"; // replace (no +)
+const WHATSAPP_NUMBER = "447440227896"; // replace (no +)
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(value);
