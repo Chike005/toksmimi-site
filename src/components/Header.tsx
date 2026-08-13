@@ -23,7 +23,6 @@ function getBasketCountFromStorage(): number {
 }
 
 export function Header() {
-  console.log('Header rendering');
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
