@@ -6,7 +6,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { loadProductsFromCsv } from "@/data/products.server";
 
 
-const WHATSAPP_NUMBER = "4474402277896"; // replace with your client number (no +)
+const WHATSAPP_NUMBER = "447440277896"; // replace with your client number (no +)
 
 
 function formatGBP(value: number) {
