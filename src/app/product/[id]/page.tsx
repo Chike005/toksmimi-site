@@ -9,7 +9,7 @@ import { AddToBasketButton } from "@/components/AddToBasketButton";
 import { ProductCard } from "@/components/ProductCard";
 
 
-const WHATSAPP_NUMBER = "4474402277896";
+const WHATSAPP_NUMBER = "447440277896";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
