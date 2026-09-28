@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import { Header } from "../components/Header";
 
 const geistSans = Geist({
@@ -15,9 +14,47 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ToksMimi Foods | Afro-Caribbean & Nigerian Groceries",
+  metadataBase: new URL("https://toksmimi.com"),
+
+  title: {
+    default: "ToksMimi Foods | Afro-Caribbean & Nigerian Groceries",
+    template: "%s | ToksMimi Foods",
+  },
+
+
+
   description:
-    "Shop Afro-Caribbean and Nigerian groceries, food essentials, drinks, spices and more from ToksMimi Foods.",
+    "Shop Afro-Caribbean and Nigerian groceries, drinks, spices, rice, flour, snacks and everyday food essentials from ToksMimi Foods.",
+
+  keywords: [
+    "ToksMimi Foods",
+    "African groceries",
+    "Nigerian groceries",
+    "Afro-Caribbean groceries",
+    "African food Manchester",
+    "Nigerian food Manchester",
+    "African grocery store Manchester",
+  ],
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  openGraph: {
+    type: "website",
+    title: "ToksMimi Foods | Afro-Caribbean & Nigerian Groceries",
+    description:
+      "Shop Afro-Caribbean and Nigerian groceries, drinks, spices, rice, flour, snacks and everyday food essentials.",
+    siteName: "ToksMimi Foods",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "ToksMimi Foods | Afro-Caribbean & Nigerian Groceries",
+    description:
+      "Shop Afro-Caribbean and Nigerian groceries, drinks, spices, rice, flour, snacks and everyday food essentials.",
+  },
 };
 
 export default function RootLayout({

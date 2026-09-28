@@ -37,6 +37,7 @@ export function Header() {
     const onStorage = (e: StorageEvent) => {
       if (e.key === BASKET_STORAGE_KEY) setBasketCount(getBasketCountFromStorage());
     };
+  
 
     const onBasketEvent = () => setBasketCount(getBasketCountFromStorage());
 

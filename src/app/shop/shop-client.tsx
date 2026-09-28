@@ -6,7 +6,7 @@ import Link from "next/link";
 import type { Product } from "@/data/catalog";
 import { ProductCard } from "@/components/ProductCard";
 
-const WHATSAPP_NUMBER = "447845068117"; // wa.me expects no "+"
+const WHATSAPP_NUMBER = "4474402277896"; // wa.me expects no "+"
 const BASKET_STORAGE_KEY = "toksmimi:basket:v1";
 
 type Category = { id: string; name: string };
@@ -132,6 +132,24 @@ export function ShopClient(props: {
   }, [basket, props.products]);
 
   const basketCount = useMemo(() => basketItems.reduce((sum, i) => sum + i.qty, 0), [basketItems]);
+  const basketSubtotal = useMemo(() => {
+  return basketItems.reduce((sum, item) => {
+    const price =
+      typeof item.product.priceGBP === "number"
+        ? item.product.priceGBP
+        : 0;
+
+    return sum + price * item.qty;
+  }, 0);
+}, [basketItems]);
+
+const hasUnpricedItems = useMemo(
+  () =>
+    basketItems.some(
+      (item) => typeof item.product.priceGBP !== "number"
+    ),
+  [basketItems]
+);
 
   const customer: CustomerDetails = useMemo(
     () => ({
@@ -143,7 +161,10 @@ export function ShopClient(props: {
     [customerName, deliveryArea, deliveryTime, deliveryType]
   );
 
-  const canOrder = basketItems.length > 0 && customer.name.length > 0;
+const canOrder =
+  basketItems.length > 0 &&
+  customer.name.length > 0 &&
+  (customer.type === "pickup" || customer.area.length > 0);
 
   const whatsappHref = useMemo(() => {
     if (!canOrder) return "";
@@ -450,11 +471,16 @@ export function ShopClient(props: {
                         <div className="min-w-0">
                           <p className="truncate font-medium">{product.name}</p>
                           <p className="text-sm text-slate-600 dark:text-slate-300">
-                            {product.unit ?? ""}{" "}
-                            {typeof product.priceGBP === "number"
-                              ? `• £${product.priceGBP.toFixed(2)}`
-                              : ""}
-                          </p>
+                          {product.unit ?? ""}
+                          {typeof product.priceGBP === "number" && (
+                            <>
+                              {" "}• £{product.priceGBP.toFixed(2)} each
+                              {qty > 1 && (
+                                <> • £{(product.priceGBP * qty).toFixed(2)} total</>
+                              )}
+                            </>
+                          )}
+                        </p>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -484,6 +510,27 @@ export function ShopClient(props: {
                   </div>
 
                   {/* Delivery details */}
+                  <div className="mt-5 border-t border-slate-200 pt-4 dark:border-slate-800">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">Estimated subtotal</span>
+
+                      <span className="text-lg font-semibold">
+                        £{basketSubtotal.toFixed(2)}
+                      </span>
+                    </div>
+
+                    {hasUnpricedItems && (
+                      <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+                        Some items do not have a listed price. The final total will be confirmed on WhatsApp.
+                      </p>
+                    )}
+
+                    {deliveryType === "delivery" && (
+                      <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+                        Delivery fee is not included and will be confirmed based on your area.
+                      </p>
+                    )}
+                  </div>
                   <div className="mt-5 space-y-3">
                     <p className="text-sm font-medium">Delivery details</p>
 
@@ -554,9 +601,16 @@ export function ShopClient(props: {
 
 
                   {!canOrder && (
-                    <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">
-                      Add at least 1 item and enter your name to place an order.
-                    </p>
+            <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">
+              {basketItems.length === 0
+                ? "Add at least 1 item to your basket."
+                : !customer.name
+                ? "Enter your name to continue."
+                : deliveryType === "delivery" && !customer.area
+                ? "Enter your delivery area to continue."
+                : "Complete the required details to continue."}
+            </p>
+
                   )}
                 </>
               )}

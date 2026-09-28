@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,6 +6,8 @@ import { categories } from "@/data/catalog";
 import { loadProductsFromCsv } from "@/data/products.server";
 import { BackButton } from "@/components/BackButton";
 import { AddToBasketButton } from "@/components/AddToBasketButton";
+import { ProductCard } from "@/components/ProductCard";
+
 
 const WHATSAPP_NUMBER = "4474402277896";
 
@@ -15,16 +18,47 @@ function formatGBP(value: number) {
   }).format(value);
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const products = await loadProductsFromCsv();
+  const product = products.find((p) => p.id === id);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+
+  return {
+    title: product.name,
+    description:
+      product.description ||
+      `Shop ${product.name} from ToksMimi Foods. Afro-Caribbean and Nigerian groceries and food essentials.`,
+  };
+}
 export default async function ProductDetailsPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const products = loadProductsFromCsv();
+  const products =await loadProductsFromCsv();
   const product = products.find((p) => p.id === id);
 
   if (!product) notFound();
+
+  const relatedProducts = products
+  .filter(
+    (p) =>
+      p.categoryId === product.categoryId &&
+      p.id !== product.id &&
+      p.inStock
+  )
+  .slice(0, 4);
 
   const categoryName =
     categories.find((c) => c.id === product.categoryId)?.name ?? "Category";
@@ -174,6 +208,36 @@ export default async function ProductDetailsPage({
           </div>
         </div>
       </section>
+              {relatedProducts.length > 0 && (
+        <section className="mt-14">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-semibold">You may also like</h2>
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                More products from {categoryName}
+              </p>
+            </div>
+
+            <Link
+              href={`/shop?category=${product.categoryId}`}
+              className="text-sm underline"
+            >
+              View all
+            </Link>
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+            {relatedProducts.map((relatedProduct) => (
+              <ProductCard
+                key={relatedProduct.id}
+                product={relatedProduct}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+            
     </main>
   );
 }
