@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
 import { Header } from "../components/Header";
 
 const geistSans = Geist({
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://toksmimi.com"),
+  metadataBase: new URL("https://toksmimi-site-7dtrsr1vk-chike-s-projects.vercel.app/"),
 
   title: {
     default: "ToksMimi Foods | Afro-Caribbean & Nigerian Groceries",
