@@ -82,6 +82,21 @@ export function Header() {
     router.push(`/shop?q=${encodeURIComponent(query)}`);
   }
 
+   function goToBasket() {
+  if (pathname === "/shop") {
+    const basket = document.getElementById("basket");
+
+    if (basket) {
+      basket.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      return;
+    }
+  }
+
+  router.push("/shop#basket");
+}
   
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
@@ -96,9 +111,13 @@ export function Header() {
               Shop
             </Link>
 
-            <Link href="/shop#basket" className="hover:underline">
-              Basket ({basketCount})
-            </Link>
+            <button
+            type="button"
+            onClick={goToBasket}
+            className="hover:underline"
+            >
+            Basket ({basketCount})
+            </button>
           </nav>
 
         </div>

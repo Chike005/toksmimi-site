@@ -6,7 +6,7 @@ import Link from "next/link";
 import type { Product } from "@/data/catalog";
 import { ProductCard } from "@/components/ProductCard";
 
-const WHATSAPP_NUMBER = "4474402277896"; // wa.me expects no "+"
+const WHATSAPP_NUMBER = "447440277896"; // wa.me expects no "+"
 const BASKET_STORAGE_KEY = "toksmimi:basket:v1";
 
 type Category = { id: string; name: string };
@@ -97,6 +97,7 @@ export function ShopClient(props: {
 
   // Basket state: { [productId]: qty }
   const [basket, setBasket] = useState<Record<string, number>>({});
+  const [basketLoaded, setBasketLoaded] = useState(false);
 
   function addToBasket(p: Product) {
     setBasket((prev) => ({ ...prev, [p.id]: (prev[p.id] ?? 0) + 1 }));
@@ -256,18 +257,22 @@ const canOrder =
       setBasket(cleaned);
     } catch {
       // ignore
+    } finally {
+      setBasketLoaded(true);
     }
   }, []);
 
   // Save basket whenever it changes + notify header
   useEffect(() => {
+    if (!basketLoaded) return;
+
     try {
       localStorage.setItem(BASKET_STORAGE_KEY, JSON.stringify(basket));
       window.dispatchEvent(new Event("toksmimi:basket"));
     } catch {
       // ignore
     }
-  }, [basket]);
+  }, [basket, basketLoaded]);
 
   // Smooth-scroll when hitting /shop#basket
   useEffect(() => {
@@ -284,15 +289,15 @@ const canOrder =
   }, []);
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 pb-24 md:pb-0">
       {/* Mobile sticky basket bar */}
       <div className="md:hidden">
         <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
-          <div className="mx-auto flex max-w-6xl items-center gap-3 p-3">
+          <div className="mx-auto flex max-w-6xl items-center gap-2 p-2 sm:gap-3 sm:p-3">
             <button
               type="button"
               onClick={scrollToBasketSection}
-              className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-3 text-left text-sm text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50"
+              className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-3 text-left text-sm text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50"
             >
               <span className="font-medium">Basket</span>{" "}
               <span className="text-slate-600 dark:text-slate-300">({basketCount})</span>
@@ -304,7 +309,7 @@ const canOrder =
                 rel="noreferrer"
                 role="button"
               tabIndex={canOrder ? 0 : -1}
-              className={`mt-4 block w-full rounded-lg px-4 py-3 text-center text-sm ${
+                className={`min-w-0 flex-1 rounded-lg px-2 py-3 text-center text-xs sm:px-4 sm:text-sm ${
                 canOrder
                   ? "bg-black text-white dark:bg-slate-50 dark:text-slate-900"
                   : "bg-gray-400 text-white pointer-events-none opacity-70 dark:bg-slate-700 dark:text-slate-300"
@@ -316,8 +321,6 @@ const canOrder =
           </div>
         </div>
 
-        {/* Spacer so content isn't hidden behind the fixed bar */}
-        <div className="h-20" />
       </div>
 
       {/* Controls */}
@@ -435,11 +438,11 @@ const canOrder =
         </div>
 
         {/* Right column (desktop sticky basket) */}
-        <aside className="hidden md:block md:col-span-4">
-          <div className="sticky top-24">
+        <aside className="md:col-span-4">
+          <div className="md:sticky md:top-24">
             <div
               id="basket"
-              className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
+              className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
